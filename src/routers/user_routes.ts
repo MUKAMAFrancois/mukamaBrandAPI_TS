@@ -2,7 +2,9 @@
 
 import { Router } from 'express';
 import { registerUser,
-     loginUser
+     loginUser,
+     getAllUsers,
+     logoutUser
 
 } from '../controllers/user_controllers';
 
@@ -16,6 +18,12 @@ router.post('/register', registerUser);
 //2. login a user
 
 router.post('/login',loginUser);
+
+// get all users
+router.get('/',getAllUsers);
+
+//logout
+router.get('/logout',logoutUser);
 
 
 

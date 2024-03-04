@@ -5,8 +5,8 @@ import Blog from './Blog'
 
 interface IComment extends Document {
     content: string;
-    commentor:Types.ObjectId[];
-    blog:Types.ObjectId[];
+    commentor:Types.ObjectId;
+    blog:Types.ObjectId;
     date_of_comment:Date;
 } 
 

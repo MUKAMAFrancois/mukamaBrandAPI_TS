@@ -96,35 +96,6 @@ export const deleteBlog = async (req: CustomRequest, res: Response) => {
     }
 }
 
-// post a Like to a blog
-// export const postLike = async (req: CustomRequest, res: Response) => {
-//     try {
-//         const userId = req.id; // Get the user ID from the authenticated request
-//         const blogId = req.params.blogId;
-        
-//         // Find the blog and user
-//         const blog = await Blog.findById(blogId);
-//         const user = await User.findById(userId);
-        
-//         if (!blog || !user) {
-//             return res.status(404).json({ message: 'Blog or user not found' });
-//         }
-        
-//         // Check if the user has already liked the blog
-//         if (blog.likes.includes(userId)) {
-//             return res.status(400).json({ message: 'User has already liked the blog' });
-//         }
-        
-//         // Add the user's id to the likes array of the blog
-//         blog.likes.push(userId);
-//         await blog.save();
-        
-//         res.status(200).json({ message: 'Like posted successfully' });
-//     } catch (error: any) {
-//         res.status(500).json({ message: error.message });
-//     }
-// }
-
 export const postLike = async (req: CustomRequest, res: Response) => {
     try {
       const userId = req.id; // Get the user ID from the authenticated request
@@ -148,6 +119,10 @@ export const postLike = async (req: CustomRequest, res: Response) => {
   
       // Check if the user has already liked the blog
       if (blog.likes.includes(validUserId)) {
+        
+        //update likes
+        await Blog.findByIdAndUpdate(validBlogId, { $push: { likes: validUserId } });
+
         return res.status(400).json({ message: 'User has already liked the blog' });
       }
   
@@ -193,6 +168,9 @@ export const postDislike = async (req: CustomRequest, res: Response) => {
         
         // Check if the user has already disliked the blog
         if (blog.dislikes.includes(validUserId)) {
+            // update dislikes
+            await Blog.findByIdAndUpdate(validBlogId, { $push: { dislikes: validUserId } });
+
             return res.status(400).json({ message: 'User has already disliked the blog' });
         }
         

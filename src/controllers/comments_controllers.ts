@@ -3,6 +3,7 @@
 import express, { Request, Response } from 'express';
 import Comment from '../models/Comment';
 import { CustomRequest } from './user_controllers';
+import Blog from '../models/Blog';
 
 // Create a comment (accessible by authenticated users)
 export const createComment = async (req: CustomRequest, res: Response) => {
@@ -14,6 +15,10 @@ export const createComment = async (req: CustomRequest, res: Response) => {
             blog: req.params.blogId // Use the blog ID from req.params
         });
         await newComment.save();
+        // Push the new comment's ID to the comments array in the blog
+        const blogId = req.params.blogId;
+        await Blog.findByIdAndUpdate(blogId, { $push: { comments: newComment._id } });
+
         res.status(201).json({ message: 'Comment created successfully', comment: newComment });
     } catch (error: any) {
         res.status(500).json({ message: error.message });

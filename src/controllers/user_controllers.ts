@@ -84,3 +84,20 @@ try{
 }
 }
 
+
+// get all users
+
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({ users });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+export const logoutUser = async (req: CustomRequest, res: Response) => {
+    res.clearCookie('token');
+    res.status(200).json({message:'User logged out successfully'});
+    }
