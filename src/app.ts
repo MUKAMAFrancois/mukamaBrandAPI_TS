@@ -9,8 +9,7 @@ import blogRoutes from './routers/blog_routes';
 import messageRoutes from './routers/msg_routes'; 
 import commentsRoutes from './routers/comments_routes';
 
-// import swaggerDocument from './jsonswagger.json';
-// import swaggerUi from 'swagger-ui-express';
+
 
 
 const app: Application = express();
@@ -18,7 +17,6 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 const PORT: number = 3000;
 const MONGODB_URI: string = "mongodb://localhost:27017/TSPortifo";
-// const MongoStore = require('connect-mongo');
 import MongoStore from 'connect-mongo';
 
 
@@ -48,7 +46,7 @@ app.use(session({
 const { swaggerUi, swaggerDocs } = require('./docs/swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
  
 // Connect to MongoDB
