@@ -1,0 +1,523 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Blog Docs",
+    "description": "API documentation",
+    "license": {
+      "name": "MIT",
+      "url": "https//opensource.org/license/MIt"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1"
+    }
+  ],
+  "comments":{
+    "securitySchemes":{
+      "type":"apiKey",
+      "scheme":"bearer",
+      "name":"Authorization",
+      "in":"header",
+      "bearerFormat":"JWT",
+      "description":"Enter JWT token in the format 'Bearer <token>'"
+    }
+
+  },
+"security":[
+  {
+    "bearerAuth":[]
+  }],
+
+  "apis":["./routers/blog_routes.ts","./routers/user_routes.ts","./routers/msg_routes.ts","./routers/comments_routes.ts"],
+
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Register a new user",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all users",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "List of users retrieved successfully"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login a user",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginCredentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "get": {
+        "summary": "Logout a user",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully"
+          }
+        }
+      }
+    },
+    "/blogs": {
+      "post": {
+        "summary": "Create a new blog",
+        "operationId": "createBlog",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Blog created successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all blogs",
+        "operationId": "getAllBlogs",
+        "responses": {
+          "200": {
+            "description": "List of blogs retrieved successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{id}": {
+      "get": {
+        "summary": "Get a blog by its ID",
+        "operationId": "getBlogById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the blog to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog retrieved successfully"
+          }
+        }
+      },
+      "put": {
+        "summary": "Edit a blog",
+        "operationId": "editBlog",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the blog to edit",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Blog edited successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a blog",
+        "operationId": "deleteBlog",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the blog to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog deleted successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/like": {
+      "post": {
+        "summary": "Like a blog",
+        "operationId": "postLike",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to like",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog liked successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/dislike": {
+      "post": {
+        "summary": "Dislike a blog",
+        "operationId": "postDislike",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to dislike",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog disliked successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/countLikes": {
+      "get": {
+        "summary": "Count likes for a blog",
+        "operationId": "countLikes",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to count likes for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Likes counted successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/countDislikes": {
+      "get": {
+        "summary": "Count dislikes for a blog",
+        "operationId": "countDislikes",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to count dislikes for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dislikes counted successfully"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/countComments": {
+      "get": {
+        "summary": "Count comments for a blog",
+        "operationId": "countComments",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to count comments for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments counted successfully"
+          }
+        }
+      }
+    },
+    "/comments/{blogId}": {
+      "post": {
+        "summary": "Create a comment",
+        "operationId": "createComment",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to comment on",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Comment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Comment created successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get comments for a blog",
+        "operationId": "getCommentsByBlogId",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of the blog to retrieve comments for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments retrieved successfully"
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "delete": {
+        "summary": "Delete a comment",
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the comment to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully"
+          }
+        }
+      }
+    },
+    "/messages": {
+      "post": {
+        "summary": "Send a message",
+        "operationId": "sendMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "View all messages",
+        "operationId": "viewMessages",
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully"
+          }
+        }
+      }
+    },
+    "/messages/{id}": {
+      "delete": {
+        "summary": "Delete a message",
+        "operationId": "deleteMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the message to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message deleted successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "password"
+        ]
+      },
+      "LoginCredentials": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "Blog": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "imageURL": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "content",
+          "imageURL"
+        ]
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      }
+    }
+  }
+}
+}

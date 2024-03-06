@@ -10,28 +10,109 @@ import { registerUser,
 
 
 const router = Router();
-
-
-//1. register a new user
-router.post('/register', registerUser);
-
-//2. login a user
-
-router.post('/login',loginUser);
-
-// get all users
-router.get('/',getAllUsers);
-
-//logout
-router.get('/logout',logoutUser);
-
-
-
-
-
-
-
-
-
-
 export default router;
+
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: CRUD operations for users
+ */
+
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       '201':
+ *         description: A new user registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.post('/users/register', registerUser);
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       '200':
+ *         description: User logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.post('/users/login',loginUser);
+
+
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retrieve all users
+ *     tags: [User]
+ *     responses:
+ *       '200':
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.get('/users',getAllUsers);
+
+
+
+/**
+ * @swagger
+ * /users/logout:
+ *   get:
+ *     summary: Logout a user
+ *     tags: [User]
+ *     responses:
+ *       '200':
+ *         description: User logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get('/users/logout',logoutUser);
+
+
+
+
+
+
+
+
+

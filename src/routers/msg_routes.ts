@@ -7,12 +7,12 @@ import { authMiddleWare } from '../controllers/user_controllers';
 const router = express.Router();
 
 // Send a message (accessible by authenticated users)
-router.post('/', authMiddleWare, sendMessage);
+router.post('/messages', authMiddleWare, sendMessage);
 
 // View all messages (accessible by admin only)
-router.get('/', authMiddleWare, viewMessages);
+router.get('/messages', authMiddleWare, viewMessages);
 
 // Delete a message (accessible by admin only)
-router.delete('/:id', authMiddleWare, deleteMessage);
+router.delete('/messages/:id', authMiddleWare, deleteMessage);
 
 export default router;
