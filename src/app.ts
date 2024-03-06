@@ -9,13 +9,16 @@ import blogRoutes from './routers/blog_routes';
 import messageRoutes from './routers/msg_routes'; 
 import commentsRoutes from './routers/comments_routes';
 
+
+
+
 const app: Application = express();
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 const PORT: number = 3000;
 const MONGODB_URI: string = "mongodb://localhost:27017/TSPortifo";
-// const MongoStore = require('connect-mongo');
 import MongoStore from 'connect-mongo';
+
 
 
 // Middleware
@@ -37,6 +40,15 @@ app.use(session({
 
   }));
 
+
+
+// swagger
+const { swaggerUi, swaggerDocs } = require('./docs/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
+
+ 
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
   .then(() => {
@@ -51,8 +63,13 @@ mongoose.connect(MONGODB_URI)
   });
 
 // Routes
-app.use('/api/v1/users', userRoutes); // Using userRoutes for '/users' route
-app.use('/api/v1/blogs', blogRoutes); // Using blogRoutes for '/blogs' route
-app.use('/api/v1/messages', messageRoutes); // Using messageRoutes for '/messages' route
-app.use('/api/v1/comments', commentsRoutes); // Using commentsRoutes for '/comments' route
+app.use('/api/v1', userRoutes); // Using userRoutes for '/users' route
+app.use('/api/v1', blogRoutes); // Using blogRoutes for '/blogs' route
+app.use('/api/v1', messageRoutes); // Using messageRoutes for '/messages' route
+app.use('/api/v1', commentsRoutes); // Using commentsRoutes for '/comments' route
+
+
+export default app;
+
+
 

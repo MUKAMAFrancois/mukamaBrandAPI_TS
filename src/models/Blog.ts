@@ -1,6 +1,7 @@
+///src/models/Blog.ts model
 import mongoose, { Schema, Document,Types } from 'mongoose';
 
-interface IBlog extends Document {
+export interface IBlog extends Document {
     _id: Types.ObjectId;
     title: string;
     content: string;
