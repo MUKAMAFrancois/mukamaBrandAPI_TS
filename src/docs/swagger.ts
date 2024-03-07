@@ -23,8 +23,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url:[ 'http://localhost:3000/api/v1','https://mukamadeployts.onrender.com'],
-        
+        url: 'http://localhost:3000/api/v1',
+        description: 'for local Host',
+      },
+      {
+        url: 'https://mukamadeployts.onrender.com',
+        description: 'for production',
       },
     ],
     components:{
