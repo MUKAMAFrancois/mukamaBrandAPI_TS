@@ -16,7 +16,8 @@ const app: Application = express();
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 const PORT: number = 3000;
-const MONGODB_URI: string = "mongodb://localhost:27017/TSPortifo";
+// const MONGODB_URI: string = "mongodb://localhost:27017/TSPortifo";
+const MONGODB_URI: string = process.env.MONGO_CONNECT_STRING!;
 import MongoStore from 'connect-mongo';
 
 
