@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 import Message, { IMessage } from '../../src/models/Message';
+const MONGODB_URI: string = process.env.MONGO_CONNECT_STRING!;
 
 describe('Message Model', () => {
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost:27017/TSPortifo');
+    await mongoose.connect(MONGODB_URI);
   });
 
   afterAll(async () => {

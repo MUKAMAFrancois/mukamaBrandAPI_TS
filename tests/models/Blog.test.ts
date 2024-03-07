@@ -5,9 +5,10 @@
 
 import mongoose from 'mongoose';
 import Blog from '../../src/models/Blog';
+const MONGODB_URI: string = process.env.MONGO_CONNECT_STRING!;
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/TSPortifo')});
+  await mongoose.connect(MONGODB_URI)});
 ;
 
 afterAll(async () => {
