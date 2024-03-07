@@ -45,7 +45,7 @@ app.use(session({
 
 // swagger
 const { swaggerUi, swaggerDocs } = require('./docs/swagger');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 
