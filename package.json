@@ -24,7 +24,8 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "nodemon dist/app.js",
-    "test": "jest"
+    "test": "jest",
+    "build":"tsc"
   },
   "keywords": [],
   "author": "",
