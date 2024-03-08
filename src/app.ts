@@ -3,6 +3,7 @@ require('dotenv').config();
 import express, { Application} from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser'; 
+import cors from 'cors'; //npm install --save @types/cors
 
 import userRoutes from './routers/user_routes'; 
 import blogRoutes from './routers/blog_routes'; 
@@ -23,6 +24,7 @@ import MongoStore from 'connect-mongo';
 
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
