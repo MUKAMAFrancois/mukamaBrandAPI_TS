@@ -9,10 +9,6 @@ import userRoutes from './routers/user_routes';
 import blogRoutes from './routers/blog_routes'; 
 import messageRoutes from './routers/msg_routes'; 
 import commentsRoutes from './routers/comments_routes';
-
-
-
-
 const app: Application = express();
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
@@ -24,7 +20,12 @@ import MongoStore from 'connect-mongo';
 
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://mukamaapideploy.onrender.com'],
+  methods: 'GET,PUT,POST,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());

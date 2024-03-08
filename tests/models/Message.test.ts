@@ -1,3 +1,4 @@
+require('dotenv').config();
 import mongoose from 'mongoose';
 import Message, { IMessage } from '../../src/models/Message';
 const MONGODB_URI: string = process.env.MONGO_CONNECT_STRING!;
@@ -33,7 +34,7 @@ describe('Message Model', () => {
 
     try {
       await Message.create(messageData);
-    } catch (error) {
+    } catch (error:any) {
       expect(error.message).toContain('Message is too long');
     }
   });

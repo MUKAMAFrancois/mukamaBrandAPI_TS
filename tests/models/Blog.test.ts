@@ -2,7 +2,7 @@
 //npm i --save-dev @types/jest
 // tests/models/Blog.test.ts
 //npm install --save-dev ts-jest @types/jest
-
+require('dotenv').config();
 import mongoose from 'mongoose';
 import Blog from '../../src/models/Blog';
 const MONGODB_URI: string = process.env.MONGO_CONNECT_STRING!;

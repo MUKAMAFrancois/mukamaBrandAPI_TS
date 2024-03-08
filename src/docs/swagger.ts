@@ -2,12 +2,6 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 
-
-
-
-
-
-
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
@@ -22,10 +16,10 @@ const swaggerOptions = {
       },
     },
     servers: [
-      // {
-      //   url: 'http://localhost:3000',
-      //   description: 'Local',
-      // },
+      {
+        url: 'http://localhost:3000',
+        description: 'Local',
+      },
       {
         url:'https://mukamaapideploy.onrender.com',
         description: 'Production',
