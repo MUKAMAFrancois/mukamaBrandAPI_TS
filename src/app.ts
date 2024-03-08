@@ -66,10 +66,10 @@ mongoose.connect(MONGODB_URI)
   });
 
 // Routes
-app.use('/api/v1', userRoutes); // Using userRoutes for '/users' route
-app.use('/api/v1', blogRoutes); // Using blogRoutes for '/blogs' route
-app.use('/api/v1', messageRoutes); // Using messageRoutes for '/messages' route
-app.use('/api/v1', commentsRoutes); // Using commentsRoutes for '/comments' route
+app.use('/', userRoutes); // Using userRoutes for '/users' route
+app.use('/', blogRoutes); // Using blogRoutes for '/blogs' route
+app.use('/', messageRoutes); // Using messageRoutes for '/messages' route
+app.use('/', commentsRoutes); // Using commentsRoutes for '/comments' route
 
 
 export default app;

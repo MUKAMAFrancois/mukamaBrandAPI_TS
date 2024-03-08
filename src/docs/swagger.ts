@@ -22,12 +22,12 @@ const swaggerOptions = {
       },
     },
     servers: [
+      // {
+      //   url: 'http://localhost:3000',
+      //   description: 'Local',
+      // },
       {
-        url: 'http://localhost:3000/api/v1',
-        description: 'Local',
-      },
-      {
-        url:'https://mukamaapideploy.onrender.com/api/v1',
+        url:'https://mukamaapideploy.onrender.com',
         description: 'Production',
       }
       
