@@ -1,7 +1,7 @@
 // src/app.ts
 require('dotenv').config();
 import express, { Application} from 'express';
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 import bodyParser from 'body-parser'; 
 import cors from 'cors'; //npm install --save @types/cors
 
@@ -54,7 +54,7 @@ app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
  
 // Connect to MongoDB
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true} as ConnectOptions)
   .then(() => {
     console.log('Connected to MongoDB');
     // Start the server once connected to the database
