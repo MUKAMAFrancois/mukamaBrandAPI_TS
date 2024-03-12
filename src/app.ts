@@ -21,7 +21,7 @@ import MongoStore from 'connect-mongo';
 
 // Middleware
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://mukamabrand.onrender.com'],
+  origin: ['http://localhost:3000', 'https://mukamabrand202.onrender.com'],
   methods: 'GET,PUT,POST,DELETE',
   allowedHeaders: 'Content-Type, Authorization',
 };
