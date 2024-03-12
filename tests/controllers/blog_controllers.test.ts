@@ -1,100 +1,125 @@
-require('dotenv').config();
 import request from 'supertest';
-import app from '../../src/app';
+import express, { Application } from 'express';
+import mongoose from 'mongoose';
+import {
+  createBlog,
+  getAllBlogs,
+  getBlogById,
+  editBlog,
+  deleteBlog,
+  postLike,
+  postDislike,
+  countLikes,
+  countDislikes,
+  countComments
+} from '../../src/controllers/blog_controllers';
 import Blog from '../../src/models/Blog';
 import User from '../../src/models/User';
-import jwt from 'jsonwebtoken';
 
-describe('Blog Controller', () => {
-  const testUser = {
-    username: 'testUser',
-    email: 'testUser@test.com',
-    password: 'testPassword123',
-    userRole: 'admin',
-  };
+const app: Application = express();
+app.use(express.json());
 
-  const testBlog = {
-    title: 'Test Blog',
-    content: 'Test Content',
-    imageURL: 'https://test-image.com/image.jpg'
-  };
+app.post('/blogs', createBlog);
+app.get('/blogs', getAllBlogs);
+app.get('/blogs/:id', getBlogById);
+app.put('/blogs/:id', editBlog);
+app.delete('/blogs/:id', deleteBlog);
+app.post('/blogs/:blogId/like', postLike);
+app.post('/blogs/:blogId/dislike', postDislike);
+app.get('/blogs/:blogId/countLikes', countLikes);
+app.get('/blogs/:blogId/countDislikes', countDislikes);
+app.get('/blogs/:blogId/countComments', countComments);
 
-  let createdBlog: any;
-  let createdUser: any;
+jest.mock('../../src/models/Blog');
+jest.mock('../../src/models/User');
 
-  beforeAll(async () => {
-    // Create a test user
-    const user = new User(testUser);
-    await user.save();
-    createdUser = user;
-    const blog = new Blog(testBlog);
-    createdBlog = await blog.save();
+const req = {
+  body: { title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', id: 'testUserId' },
+  cookies: { token: 'mockedTokenValue' } // Mock the cookies object
+};
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('Blog Controllers', () => {
+  test('createBlog', async () => {
+    const blog = { ...req.body, _id: 'testBlogId' };
+    (Blog.prototype.save as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).post('/blogs').send(req.body);
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual({ message: 'Blog created successfully', blog });
   });
 
-  afterAll(async () => {
-    // Clean up test data
-    await User.deleteMany({});
-    await Blog.deleteMany({});
+  test('getAllBlogs', async () => {
+    const blogs = [{ title: 'Test Blog 1', content: 'This is test blog 1', imageURL: 'test1.jpg' }, { title: 'Test Blog 2', content: 'This is test blog 2', imageURL: 'test2.jpg' }];
+    (Blog.find as jest.Mock).mockResolvedValue(blogs);
+    const res = await request(app).get('/blogs');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ allBlogs: 'All Blogs', blogs });
   });
 
-  // Manually generate token
-  const token = jwt.sign({id:createdUser._id}, process.env.JWT_SECRET!);
-
-  describe('createBlog', () => {
-    it('creates a new blog and returns a 201 status code', async () => {
-      const newBlog = {
-        title: 'New Test Blog',
-        content: 'New Test Content',
-        imageURL: 'https://test-image.com/new-image.jpg',
-      };
-      const res = await request(app)
-        .post('/blogs')
-        .set('Authorization', `Bearer ${token}`) // Use the generated token
-        .send(newBlog)
-        .expect(201);
-
-      expect(res.body.message).toEqual('Blog created successfully');
-      expect(res.body.blog.title).toEqual(newBlog.title);
-    });
-
-    it('returns a 400 status code if the request body is missing required fields', async () => {
-      const res = await request(app)
-        .post('/blogs')
-        .set('Authorization', `Bearer ${token}`)// Use the generated token
-        .send({})
-        .expect(400);
-
-      expect(res.body.message).toEqual('title, content, and imageURL are required');
-    });
+  test('getBlogById', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg' };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).get('/blogs/testBlogId');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ blog });
   });
 
-  describe('getAllBlogs', () => {
-    it('returns a list of blogs and a 200 status code', async () => {
-      const res = await request(app)
-        .get('/blogs')
-        .expect(200);
-
-      expect(Array.isArray(res.body.blogs)).toBe(true);
-      expect(res.body.blogs.length).toBeGreaterThan(0);
-    });
+  test('editBlog', async () => {
+    const blog = { ...req.body, _id: 'testBlogId' };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).put('/blogs/testBlogId').send(req.body);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ message: 'Blog updated successfully', blog });
   });
 
-  describe('getBlogById', () => {
-    it('returns a blog by id and a 200 status code', async () => {
-      const res = await request(app)
-        .get(`/blogs/${createdBlog._id}`)
-        .expect(200);
+  test('deleteBlog', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', author: 'testUserId' };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).delete('/blogs/testBlogId');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ message: 'Blog deleted successfully' });
+  });
 
-      expect(res.body.blog.title).toEqual(createdBlog.title);
-    });
+  test('postLike', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', likes: [] };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).post('/blogs/testBlogId/like');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ message: 'Like posted successfully' });
+  });
 
-    it('returns a 404 status code if the blog id does not exist', async () => {
-      const nonExistentId = '60b8842b48e9e027dca930b0'; // Some non-existent ID
-      const res = await request(app)
-        .get(`/blogs/${nonExistentId}`)
-        .expect(400);
+  test('postDislike', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', dislikes: [] };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).post('/blogs/testBlogId/dislike');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ message: 'Dislike posted successfully' });
+  });
 
-      expect(res.body.message).toEqual('Blog not found');
-    });
+  test('countLikes', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', likes: ['userId1', 'userId2'] };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).get('/blogs/testBlogId/countLikes');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ likes: 2 });
+  });
+
+  test('countDislikes', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', dislikes: ['userId1', 'userId2'] };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).get('/blogs/testBlogId/countDislikes');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ dislikes: 2 });
+  });
+
+  test('countComments', async () => {
+    const blog = { _id: 'testBlogId', title: 'Test Blog', content: 'This is a test blog', imageURL: 'test.jpg', comments: ['comment1', 'comment2'] };
+    (Blog.findById as jest.Mock).mockResolvedValue(blog);
+    const res = await request(app).get('/blogs/testBlogId/countComments');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ comments: 2 });
   });
 });

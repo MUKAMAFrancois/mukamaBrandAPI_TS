@@ -24,7 +24,7 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "nodemon dist/app.js",
-    "test": "jest",
+    "test": "jest --coverage",
     "build": "tsc",
     "dev": "ts-node src/app.ts"
   },
