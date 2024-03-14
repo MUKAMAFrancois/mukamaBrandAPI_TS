@@ -19,13 +19,7 @@ import MongoStore from 'connect-mongo';
 
 
 
-// Middleware
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://mukamabrand202.onrender.com'],
-  methods: 'GET,PUT,POST,DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
-};
-app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -67,6 +61,10 @@ mongoose.connect(MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true} a
   });
 
 // Routes
+
+// Middleware
+
+app.use(cors());
 app.use('/', userRoutes); // Using userRoutes for '/users' route
 app.use('/', blogRoutes); // Using blogRoutes for '/blogs' route
 app.use('/', messageRoutes); // Using messageRoutes for '/messages' route
