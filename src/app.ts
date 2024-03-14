@@ -42,7 +42,7 @@ app.use(session({
 
 // swagger
 const { swaggerUi, swaggerDocs } = require('./docs/swagger');
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 
