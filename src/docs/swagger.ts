@@ -21,7 +21,7 @@ const swaggerOptions = {
         description: 'Local',
       },
       {
-        url:'https://mukamabrand202.onrender.com',
+        url:'https://mukamadeployts.onrender.com',
         description: 'Production',
       }
       

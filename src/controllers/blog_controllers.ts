@@ -28,7 +28,7 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
 
 export const getAllBlogs = async (req: Request, res: Response) => {
     try {
-        const blogs = await Blog.find();
+        const blogs = await Blog.find().populate('author', 'username');
         res.status(200).json({
             allBlogs:"All Blogs", 
             blogs });
