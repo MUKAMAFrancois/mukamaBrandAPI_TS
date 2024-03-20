@@ -52,7 +52,8 @@ export const loginUser = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!);
-        res.cookie('token', token,{httpOnly:true});
+        // req.headers('token', token,{httpOnly:true});
+        req.headers.authorization = `Bearer ${token}`;
         res.status(200).json({ message: 'User logged in successfully',user,token });
      
 
@@ -71,7 +72,7 @@ export interface CustomRequest extends Request {
 }
 
 export const authMiddleWare = async (req: CustomRequest, res: Response, next: NextFunction) => {
-const token=req.cookies.token;
+const token=req.headers.authorization?.split(' ')[1];
 if(!token){
     return res.status(401).json({message:'Unauthorized'});
 }
