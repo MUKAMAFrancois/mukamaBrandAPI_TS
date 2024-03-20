@@ -118,7 +118,7 @@ router.post('/blogs',authMiddleWare,createBlog);
  */
 
 
-router.put('/blogs/:id', authMiddleWare, editBlog);
+router.patch('/blogs/:id', authMiddleWare, editBlog);
 
 /**
  * @swagger
