@@ -92,7 +92,7 @@ router.post('/blogs',authMiddleWare,createBlog);
 /**
  * @swagger
  * /blogs/{id}:
- *   put:
+ *   patch:
  *     summary: Edit a blog
  *     tags: [Blog]
  *     parameters:
