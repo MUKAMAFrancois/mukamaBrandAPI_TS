@@ -119,13 +119,9 @@ export const postLike = async (req: CustomRequest, res: Response) => {
   
       // Check if the user has already liked the blog
       if (blog.likes.includes(validUserId)) {
-        
-        //update likes
-        await Blog.findByIdAndUpdate(validBlogId, { $push: { likes: validUserId } });
-
         return res.status(400).json({ message: 'User has already liked the blog' });
       }
-  
+
       // Add the user's id to the likes array of the blog
       blog.likes.push(validUserId);
       await blog.save();
@@ -136,10 +132,6 @@ export const postLike = async (req: CustomRequest, res: Response) => {
     }
   };
   
-
-
-
-
 
 // Post a dislike for a specific blog (accessible by authenticated users)
 export const postDislike = async (req: CustomRequest, res: Response) => {
@@ -168,16 +160,12 @@ export const postDislike = async (req: CustomRequest, res: Response) => {
         
         // Check if the user has already disliked the blog
         if (blog.dislikes.includes(validUserId)) {
-            // update dislikes
-            await Blog.findByIdAndUpdate(validBlogId, { $push: { dislikes: validUserId } });
-
             return res.status(400).json({ message: 'User has already disliked the blog' });
         }
         
         // Add the user's id to the dislikes array of the blog
         blog.dislikes.push(validUserId);
-        await blog.save();
-        
+        await blog.save(); 
         res.status(200).json({ message: 'Dislike posted successfully' });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
